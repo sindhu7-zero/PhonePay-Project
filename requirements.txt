@@ -1,0 +1,10 @@
+pandas
+SQLAlchemy
+psycopg2-binary
+streamlit
+plotly
+numpy
+matplotlib
+seaborn
+pydeck
+geopy
