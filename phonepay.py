@@ -40,10 +40,10 @@ st.markdown("### India’s Digital Payments Visualization — Powered by PhonePe
 
 def metric_transaction(df):
     col1, col2, col3,col4 = st.columns(4)
-    col1.metric("total transaction count",f"{round(df['total_transaction_count'].sum()/10000000,2)}Cr")
-    col2.metric("total transaction amount",f"{(df['total_transaction_amount'].sum())}Cr")
-    col3.metric("total state",df['state'].nunique())
-    col4.metric("total Years",df['year'].nunique())
+    col1.metric("Total transaction count",f"{round(df['total_transaction_count'].sum()/10000000,2)}Cr")
+    col2.metric("Total transaction amount",f"{(df['total_transaction_amount'].sum())}Cr")
+    col3.metric("States Covered",df['state'].nunique())
+    col4.metric("Years Covered",df['year'].nunique())
 
 def metric_user(df):
     col1, col2, col3, col4 = st.columns(4)

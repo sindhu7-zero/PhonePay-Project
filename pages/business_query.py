@@ -18,9 +18,10 @@ view_option = st.sidebar.selectbox("Choose Data Type", ["Decoding Transaction Dy
                                                          "Insurance Transactions Analysis"])
 
 if view_option=="Decoding Transaction Dynamics on PhonePe":
+    st.markdown("<h1 style='text-align: center;'> Analyzing Payment Behavior Across India on PhonePe </h1>", unsafe_allow_html=True)
 
 ###Query 1-state,Year, quarter wise total transaction and Total Count 
-
+    st.markdown('------')
     query='''select state,
     year
     quarter,
@@ -30,8 +31,9 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     GROUP BY state,year,quarter
     ORDER BY state,year,quarter'''
     total_transaction=pd.read_sql(query,engine)
-    st.subheader("State,Year, quarter wise total transaction and Total Count")
+    st.subheader("State,Year, Quarter wise total transaction and Total Count")
     st.dataframe(total_transaction)
+    st.markdown('------')
 
     ###2.Top 10 states
     query='''SELECT
@@ -43,7 +45,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     ORDER BY SUM(transaction_amount) desc
     limit 10'''
     top_states=pd.read_sql(query,engine)
-    st.subheader("Top 10 states")
+    st.subheader("🔝Top 10 states")
     st.dataframe(top_states)
     fig, ax = plt.subplots(figsize=(15, 6))
     sns.barplot(data=top_states,x='state',y='total_transaction_amount',ax=ax, palette="magma",width=0.5)
@@ -51,6 +53,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     ax.set_xlabel("State")
     ax.set_ylabel("Amount")
     st.pyplot(fig)
+    st.markdown('------')
 
     ###3.bottom 10 states
     query='''SELECT
@@ -62,7 +65,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     ORDER BY SUM(transaction_amount) asc
     limit 10'''
     botttom_states=pd.read_sql(query,engine)
-    st.subheader("Bottom 10 states")
+    st.subheader("↘️Bottom 10 states")
     st.dataframe(botttom_states)
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(data=botttom_states,x='state',y='total_transaction_amount',ax=ax, palette="magma",width=0.5)
@@ -70,8 +73,9 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     ax.set_xlabel("State")
     ax.set_ylabel("Amount")
     st.pyplot(fig)
+    st.markdown('------')
 
-    ###5.top 5 categary 
+    ###Query 4:top 5 categary 
     query='''SELECT 
 
     transaction_type,
@@ -88,7 +92,30 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
                values='total_transaction_amount',
                hole=0.4)
     st.plotly_chart(fig)
+    st.markdown('------')
+
+    ###query 5:Quarterly Transaction Trend
+    query='''
+    SELECT year, quarter, 
+    
+    SUM(transaction_amount) AS total_transaction_amount
+    FROM aggregate_transaction
+    GROUP BY year, quarter
+    ORDER BY year, quarter
+    '''
+    qtr_trend=pd.read_sql(query,engine)
+    st.dataframe(qtr_trend)
+    fig=px.pie(qtr_trend,
+               names='quarter',
+               values='total_transaction_amount',
+               hole=0.4)
+    st.plotly_chart(fig)
+    st.markdown('------')
+
+
+
 if view_option=="Insurance Penetration and Growth Potential Analysis":
+    st.markdown("<h1 style='text-align: center;'> Decoding Insurance Adoption Trends Across India </h1>", unsafe_allow_html=True)
     ###query 1: State, Year, Qtr wise tolal insurance transaction count and amount
     st.markdown('------')
     query=''' SELECT
@@ -135,7 +162,7 @@ if view_option=="Insurance Penetration and Growth Potential Analysis":
     ORDER BY SUM(transaction_amount) asc
     limit 10'''
     bottom_state=pd.read_sql(query,engine)
-    st.subheader('Bottom 10 state based on transaction amount')
+    st.subheader('📉Bottom 10 state based on transaction amount')
     fig, ax=plt.subplots(figsize=(15,6))
     sns.barplot(data=bottom_state,x='state',y='total_transaction_amount',palette="coolwarm",width=0.5,ax=ax)
     ax.set_title('bottom 10 state based on transaction count')
@@ -155,7 +182,7 @@ if view_option=="Insurance Penetration and Growth Potential Analysis":
     GROUP BY quarter
     ORDER BY SUM(transaction_amount)desc'''
     qtr_rank=pd.read_sql(query,engine)
-    st.subheader('Quarter has highest transaction')
+    st.subheader('Quarter has highest⬆️ transaction')
     fig=px.pie(qtr_rank, names='quarter', values='total_transaction_amount')
     st.plotly_chart(fig)
     st.markdown('------')
@@ -178,12 +205,13 @@ if view_option=="Insurance Penetration and Growth Potential Analysis":
     '''
     y_o_y = pd.read_sql(query, engine)
     y_o_y['growth_percentage']=y_o_y['growth_percentage'].fillna(0).astype(int)
-    st.subheader("year on year growth")
+    st.subheader("📈Year on Year growth")
     st.dataframe(y_o_y)
     fig=px.line(y_o_y, x='year', y='growth_percentage')
     st.plotly_chart(fig)
 
 if view_option== "Transaction Analysis for Market Expansion":
+    st.markdown("<h1 style='text-align: center;'> Identifying Growth Opportunities through Transaction Analytics </h1>", unsafe_allow_html=True)
     ###query 1:State and year wise total_transaction_count and total_transaction_amount
     query=''' select
     state,
@@ -208,7 +236,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     ORDER BY SUM(transaction_amount) desc
     limit 10'''
     top_district=pd.read_sql(query,engine)
-    st.subheader("Top 10 district")
+    st.subheader("🔝Top 10 district")
     fig,ax=plt.subplots(figsize=(15,6))
     sns.barplot(data=top_district,x="district",y="total_transaction_amount",palette="Set2",width=0.5)
     ax.set_title("Top 10 district")
@@ -217,7 +245,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     ax.tick_params(axis='x', rotation=60)
     st.pyplot(fig)
 
-    ###query 3: bottom 10 district
+    ###query 3: Bottom 10 district
     query='''SELECT
     district,
     SUM(transaction_amount) AS total_transaction_amount
@@ -226,7 +254,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     ORDER BY SUM(transaction_amount) asc
     limit 10'''
     top_district=pd.read_sql(query,engine)
-    st.subheader("bottom 10 district")
+    st.subheader("Bottom 10 district")
     fig,ax=plt.subplots(figsize=(15,6))
     sns.barplot(data=top_district,x="district",y="total_transaction_amount",palette="Set2",width=0.5)
     ax.set_title("bottom 10 district")
@@ -284,7 +312,7 @@ if view_option== "Transaction Analysis for Market Expansion":
 
     '''
     b=pd.read_sql(query,engine)
-    st.subheader("states growing percentage above 80%")
+    st.subheader("States growing percentage📈 above 80%")
     st.dataframe(b) 
     
     ###query 5:district which growing below 30
@@ -334,11 +362,12 @@ if view_option== "Transaction Analysis for Market Expansion":
     where growth_percentage <=40
     '''
     b=pd.read_sql(query,engine)
-    st.subheader("states growing percentage below 40")
+    st.subheader("States growing percentage📉 below 40")
     st.dataframe(b)
 
 
 if view_option =="User Engagement and Growth Strategy":
+    st.markdown("<h1 style='text-align: center;'> Analyzing User Behavior for Strategic Growth on PhonePe </h1>", unsafe_allow_html=True)
     st.markdown('---')
     ###User Engagement and Growth Strategy
     ###query 1: Total register_user state and year wise
@@ -402,7 +431,7 @@ if view_option =="User Engagement and Growth Strategy":
     LIMIT 10
     '''
     top_district_user=pd.read_sql(query,engine)
-    st.subheader('top 10 district by registeruser ')
+    st.subheader('Top 10 district by registeruser ')
     fig=px.bar(top_district_user, x='district', y='total_register_user', color='district')
     st.plotly_chart(fig)
     st.markdown('-----')
@@ -423,6 +452,7 @@ if view_option =="User Engagement and Growth Strategy":
     st.markdown('------')
 
 if view_option=="Insurance Transactions Analysis":
+    st.markdown("<h1 style='text-align: center;'> Pinpointing Growth Areas in Insurance Adoption on PhonePe </h1>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
         year = st.sidebar.selectbox("Select Year", [2020, 2021, 2022, 2023,2024])
@@ -553,7 +583,7 @@ if view_option=="Insurance Transactions Analysis":
     df_bottom_pincode['entity_name'] = pd.Categorical(df_bottom_pincode['entity_name'], categories=df_bottom_pincode['entity_name'], ordered=True)
 
 
-    st.subheader("Top 10 Pincode Insurance Transactions")
+    st.subheader("Bottom 10 Pincode Insurance Transactions")
     st.dataframe(df_bottom_pincode)
 
     fig_pincode_bottom = px.bar(
@@ -601,7 +631,7 @@ if view_option=="Insurance Transactions Analysis":
         x='year',
         y='total_transaction_amount',
         color='year',
-        title=f"year by Insurance Transaction Amount ",
+        title=f"Year by Insurance Transaction Amount ",
         labels={
             'year': 'Years',
             'total_transaction_amount': 'Insurance Amount (₹)'
