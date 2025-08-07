@@ -39,7 +39,7 @@ st.markdown("<h1 style='text-align: center;'> PhonePe Pulse Dashboard </h1>", un
 st.markdown("### India’s Digital Payments Visualization — Powered by PhonePe Data")
 
 def metric_transaction(df):
-    col1, col2, col3,col4 = st.columns(4)
+    col1, col2, col3,col4 =  st.columns(4)
     col1.metric("Total transaction count",f"{round(df['total_transaction_count'].sum()/10000000,2)}Cr")
     col2.metric("Total transaction amount",f"{(df['total_transaction_amount'].sum())}Cr")
     col3.metric("States Covered",df['state'].nunique())
