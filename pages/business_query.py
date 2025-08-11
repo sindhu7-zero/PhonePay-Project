@@ -27,7 +27,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     quarter,
     SUM(transaction_count) as total_transaction_count,
     SUM(transaction_amount) AS total_transaction_amount
-    FROM aggregate_transaction
+    FROM aggregate_transaction6
     GROUP BY state,year,quarter
     ORDER BY state,year,quarter'''
     total_transaction=pd.read_sql(query,engine)
@@ -592,7 +592,7 @@ if view_option=="Insurance Transactions Analysis":
         y='total_transaction_amount',
         color='state',
         text='total_transaction_amount',
-        title=f"Top {len(df_bottom_pincode)} Pincode(s) by Insurance Transaction Amount - Q{','.join(map(str, quarter))} {year}",
+        title=f"Bottom {len(df_bottom_pincode)} Pincode(s) by Insurance Transaction Amount - Q{','.join(map(str, quarter))} {year}",
         labels={
             'entity_name': 'Pincode',
             'total_transaction_amount': 'Insurance Amount (₹)'

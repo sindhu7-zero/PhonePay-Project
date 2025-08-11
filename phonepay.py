@@ -292,7 +292,7 @@ def top_10_values_user(df_user,years, quarters):
         st.dataframe(top_pincodes_user, use_container_width=True)
 
 def catogory(states,years,quarters):
-    # Load and filter data outside the button to ensure proper filtering
+    
     query = '''
     SELECT year,
            state,
