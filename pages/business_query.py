@@ -27,7 +27,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     quarter,
     SUM(transaction_count) as total_transaction_count,
     SUM(transaction_amount) AS total_transaction_amount
-    FROM aggregate_transaction6
+    FROM aggregate_transaction
     GROUP BY state,year,quarter
     ORDER BY state,year,quarter'''
     total_transaction=pd.read_sql(query,engine)
@@ -104,6 +104,7 @@ if view_option=="Decoding Transaction Dynamics on PhonePe":
     ORDER BY year, quarter
     '''
     qtr_trend=pd.read_sql(query,engine)
+    st.subheader("Quarterly Transaction Trend")
     st.dataframe(qtr_trend)
     fig=px.pie(qtr_trend,
                names='quarter',
@@ -226,7 +227,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     a=pd.read_sql(query,engine)
     st.subheader("State and year wise total_transaction_count and total_transaction_amount")
     st.dataframe(a)
-
+    st.markdown('------')  
     ###query2 2: Top 10 district
     query='''SELECT
     district,
@@ -244,7 +245,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     ax.set_ylabel("transaction_count")
     ax.tick_params(axis='x', rotation=60)
     st.pyplot(fig)
-
+    st.markdown('------')
     ###query 3: Bottom 10 district
     query='''SELECT
     district,
@@ -262,6 +263,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     ax.set_ylabel("transaction_count")
     ax.tick_params(axis='x', rotation=60)
     st.pyplot(fig)
+    st.markdown('------')
 
     ###query 4:district which growing above 80%
     query='''WITH state_transaction AS (SELECT 
@@ -313,7 +315,8 @@ if view_option== "Transaction Analysis for Market Expansion":
     '''
     b=pd.read_sql(query,engine)
     st.subheader("States growing percentage📈 above 80%")
-    st.dataframe(b) 
+    st.dataframe(b)
+    st.markdown('------')
     
     ###query 5:district which growing below 30
     query='''WITH state_transaction AS (SELECT 
@@ -364,6 +367,7 @@ if view_option== "Transaction Analysis for Market Expansion":
     b=pd.read_sql(query,engine)
     st.subheader("States growing percentage📉 below 40")
     st.dataframe(b)
+    st.markdown('------')
 
 
 if view_option =="User Engagement and Growth Strategy":
@@ -384,6 +388,7 @@ if view_option =="User Engagement and Growth Strategy":
     st.subheader("Total register_user state and year wise")
     st.dataframe(register_user)
     st.markdown('------')
+    
 
     ### YOY growth percentage state wise
     query='''
@@ -398,6 +403,7 @@ if view_option =="User Engagement and Growth Strategy":
     ORDER BY state,year
     '''
     YOY=pd.read_sql(query,engine)
+    YOY['growth_percentage']=YOY['growth_percentage'].fillna(0).astype(int)
     st.subheader('Year-over-Year User Growth (%) by State')
     st.dataframe(YOY)
     fig = px.line(YOY, x='year', y='growth_percentage', color='state',
@@ -487,6 +493,7 @@ if view_option=="Insurance Transactions Analysis":
     labels={'total_transaction_amount': 'Insurance Amount (₹)', 'dis_name': 'District'},
     height=500)
     st.plotly_chart(fig_district_top, key="district_chart_top")
+    st.markdown('------')
 
     ## Bottom 10 distrct
     query = '''
@@ -514,6 +521,7 @@ if view_option=="Insurance Transactions Analysis":
     labels={'total_transaction_amount': 'Insurance Amount (₹)', 'dis_name': 'District'},
     height=500)
     st.plotly_chart(fig_district_bottom, use_container_width=True,key="fig_district_bottom")
+    st.markdown('------')
 
     ##top 10 pincode
     query ='''
@@ -563,6 +571,7 @@ if view_option=="Insurance Transactions Analysis":
         uniformtext_mode='hide'
     )
     st.plotly_chart(fig_pincode_top, use_container_width=True, key="pincode_chart_top")
+    st.markdown('------')
     
     ##Bottomm 10 pincode
     query = '''
@@ -612,6 +621,7 @@ if view_option=="Insurance Transactions Analysis":
         uniformtext_mode='hide'
     )
     st.plotly_chart(fig_pincode_bottom, use_container_width=True, key="pincode_chart_bottom")
+    st.markdown('------')
 
     ###year and quarter wise
 
